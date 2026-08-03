@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://krishimitra-ai-blue.vercel.app/sitemap.xml
