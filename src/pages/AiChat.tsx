@@ -26,6 +26,8 @@ export const AiChat: React.FC = () => {
     storageService.getChatHistory()
   );
   const [inputText, setInputText] = useState("");
+  const [interimText, setInterimText] = useState("");
+  const [isListening, setIsListening] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -320,6 +322,21 @@ export const AiChat: React.FC = () => {
           </div>
         )}
 
+        {/* Live Listening Banner */}
+        {isListening && (
+          <div className="p-2.5 rounded-xl bg-red-50 dark:bg-red-950/60 border border-red-200 dark:border-red-800/80 text-xs text-red-700 dark:text-red-300 flex items-center justify-between gap-2 animate-pulse">
+            <div className="flex items-center gap-2 overflow-hidden">
+              <span className="w-2 h-2 rounded-full bg-red-500 animate-ping shrink-0" />
+              <span className="font-bold shrink-0">
+                {language === "hi" ? "बोलिए..." : "Listening..."}
+              </span>
+              <span className="truncate italic font-medium text-slate-800 dark:text-slate-100">
+                "{interimText || inputText || (language === "hi" ? "आवाज़ रिकॉर्ड हो रही है..." : "Speak your query now...")}"
+              </span>
+            </div>
+          </div>
+        )}
+
         <form
           onSubmit={(e) => {
             e.preventDefault();
@@ -347,7 +364,16 @@ export const AiChat: React.FC = () => {
           <VoiceInputButton
             onTranscript={(text) => {
               setInputText(text);
+              setInterimText("");
               handleSend(text);
+            }}
+            onInterimTranscript={(text) => {
+              setInterimText(text);
+              setInputText(text);
+            }}
+            onListeningChange={(listening) => {
+              setIsListening(listening);
+              if (!listening) setInterimText("");
             }}
           />
 
@@ -357,8 +383,8 @@ export const AiChat: React.FC = () => {
             onChange={(e) => setInputText(e.target.value)}
             placeholder={
               language === "hi"
-                ? "सवाल पूछें (उदा. गेहूं के रोग या खाद की मात्रा)..."
-                : "Ask anything about crops, pests, fertilizers..."
+                ? "सवाल पूछें या 🎤 बोलकर टाइप करें..."
+                : "Ask anything or 🎤 tap microphone to dictate..."
             }
             className="flex-1 px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-transparent focus:border-emerald-500 text-xs sm:text-sm text-slate-900 dark:text-white outline-none"
           />
