@@ -1,6 +1,0 @@
-{
-  "name": "KrishiMitra AI",
-  "description": "Smart AI Assistant for Farmers with crop disease detection, weather forecast, market mandi prices, fertilizer calculator, and multi-language AI chat.",
-  "requestFramePermissions": ["camera", "microphone", "geolocation"],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
-}
